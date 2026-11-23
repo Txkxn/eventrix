@@ -37,7 +37,16 @@
     </div>
   </div>
   <div class="hero-media">
-    <div class="ph-box">[ HERO IMAGE — real stand photo ]</div>
+    <div class="slideshow" id="heroSlides">
+      <div class="slide active" style="background-image:url('assets/stand-1.webp')"></div>
+      <div class="slide" style="background-image:url('assets/stand-2.webp')"></div>
+      <div class="slide" style="background-image:url('assets/stand-3.webp')"></div>
+      <div class="slide" style="background-image:url('assets/stand-4.webp')"></div>
+      <div class="slide" style="background-image:url('assets/stand-5.webp')"></div>
+      <div class="slide" style="background-image:url('assets/stand-6.webp')"></div>
+      <div class="slide" style="background-image:url('assets/stand-7.webp')"></div>
+      <div class="slide" style="background-image:url('assets/stand-8.webp')"></div>
+    </div>
   </div>
 </section>
 
@@ -85,13 +94,13 @@
       <p>Selected stand builds from our team's portfolio.</p>
     </div>
     <div class="work-grid">
-      <div class="work-item"><div class="ph-box" style="height:100%">[ Stand photo 1 ]</div></div>
-      <div class="work-item"><div class="ph-box" style="height:100%">[ Stand photo 2 ]</div></div>
-      <div class="work-item"><div class="ph-box" style="height:100%">[ Stand photo 3 ]</div></div>
-      <div class="work-item"><div class="ph-box" style="height:100%">[ Stand photo 4 ]</div></div>
-      <div class="work-item"><div class="ph-box" style="height:100%">[ Stand photo 5 ]</div></div>
-      <div class="work-item"><div class="ph-box" style="height:100%">[ Stand photo 6 ]</div></div>
-    </div>
+<div class="work-item"><img src="assets/stand-1.webp" alt="Exhibition stand built by Eventrix" loading="lazy"></div>
+<div class="work-item"><img src="assets/stand-2.webp" alt="Exhibition stand built by Eventrix" loading="lazy"></div>
+<div class="work-item"><img src="assets/stand-3.webp" alt="Exhibition stand built by Eventrix" loading="lazy"></div>
+<div class="work-item"><img src="assets/stand-4.webp" alt="Exhibition stand built by Eventrix" loading="lazy"></div>
+<div class="work-item"><img src="assets/stand-5.webp" alt="Exhibition stand built by Eventrix" loading="lazy"></div>
+<div class="work-item"><img src="assets/stand-6.webp" alt="Exhibition stand built by Eventrix" loading="lazy"></div>
+</div>
     <div style="margin-top:40px"><a href="work.html" class="btn btn-outline">See All Work</a></div>
   </div>
 </section>
@@ -161,5 +170,63 @@
   </div>
 </footer>
 
+
+<script>
+(function(){
+  var slides = document.querySelectorAll('#heroSlides .slide');
+  if (slides.length < 2) return;
+  var i = 0;
+  setInterval(function(){
+    slides[i].classList.remove('active');
+    i = (i + 1) % slides.length;
+    slides[i].classList.add('active');
+  }, 4000);
+})();
+</script>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer">
+  <button class="lb-close" aria-label="Close">&#10005;</button>
+  <button class="lb-prev" aria-label="Previous">&#10094;</button>
+  <button class="lb-next" aria-label="Next">&#10095;</button>
+  <img src="" alt="">
+  <div class="lb-counter"></div>
+</div>
+<script>
+(function(){
+  var lb = document.getElementById('lightbox');
+  if(!lb) return;
+  var imgs = Array.from(document.querySelectorAll('.work-item img'));
+  if(!imgs.length) return;
+  var idx = 0;
+  var lbImg = lb.querySelector('img');
+  var counter = lb.querySelector('.lb-counter');
+
+  function show(i){
+    idx = (i + imgs.length) % imgs.length;
+    lbImg.src = imgs[idx].src;
+    lbImg.alt = imgs[idx].alt || '';
+    counter.textContent = (idx+1) + ' / ' + imgs.length;
+  }
+  function open(i){ show(i); lb.classList.add('open'); document.body.style.overflow='hidden'; }
+  function close(){ lb.classList.remove('open'); document.body.style.overflow=''; }
+
+  imgs.forEach(function(img, i){
+    img.parentElement.style.cursor = 'zoom-in';
+    img.parentElement.addEventListener('click', function(){ open(i); });
+  });
+
+  lb.querySelector('.lb-close').addEventListener('click', close);
+  lb.querySelector('.lb-prev').addEventListener('click', function(e){ e.stopPropagation(); show(idx-1); });
+  lb.querySelector('.lb-next').addEventListener('click', function(e){ e.stopPropagation(); show(idx+1); });
+  lb.addEventListener('click', function(e){ if(e.target === lb) close(); });
+  document.addEventListener('keydown', function(e){
+    if(!lb.classList.contains('open')) return;
+    if(e.key === 'Escape') close();
+    if(e.key === 'ArrowLeft') show(idx-1);
+    if(e.key === 'ArrowRight') show(idx+1);
+  });
+})();
+</script>
 </body>
 </html>
